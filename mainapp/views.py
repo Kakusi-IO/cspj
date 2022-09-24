@@ -7,12 +7,17 @@ from django.contrib.auth import authenticate, logout
 from django.views.generic import ListView
 from .models import *
 
-def hwfunc(request):
-    return render(request, 'hw.html', {})
-
 class TasksList(ListView):
     template_name = 'list.html'
     model = TasksModel
+
+class ProfileList(ListView):
+    template_name = 'profile.html'
+    model = Profile
+
+def hwfunc(request):
+    return render(request, 'hw.html', {})
+
 
 def signupfunc(request):
     if request.method == 'POST':
@@ -46,3 +51,4 @@ def loginfunc(request):
 def logoutfunc(request):
     logout(request)
     return redirect('login')
+

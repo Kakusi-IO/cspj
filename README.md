@@ -1,14 +1,9 @@
 ### 构建、运行
-``docker-compose up -d``
+docker-compose up -d
 
 ### 接入shell
-``docker-compose exec web /bin/bash``
+docker-compose exec web /bin/bash
 
 ### 查看log
-``docker-compose logs --tail=10``
+docker-compose logs --tail=10
 
-superuser:
-admin admin
-
-user:
-123 123
