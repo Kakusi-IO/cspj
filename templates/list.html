@@ -1,2 +1,14 @@
 <h1>List view</h1>
+
+<ul>
+{% for tm in tasksmodel %}
+    <li>
+        {{ tm.name }} <br>
+        {{ tm.description }} <br>
+        {{ tm.size }} <br>
+        {{ tm.reward }} <br>
+    </li>
+{% endfor %}
+</ul>
+
 <a href="{% url 'logout' %}">Log out</a>

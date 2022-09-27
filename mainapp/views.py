@@ -4,16 +4,21 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, logout
-from django.views.generic import ListView
+# from django.views.generic import ListView
 from .models import *
 
-class TasksList(ListView):
-    template_name = 'list.html'
-    model = TasksModel
+def listfunc(request):
+    objs = {
+        # 'alltask': [TaskModel.objects.all()],
+        'tasksmodel' : TasksModel.objects.all(),
+    }
+    return render(request, 'list.html', objs)
 
-class ProfileList(ListView):
-    template_name = 'profile.html'
-    model = Profile
+def profilefunc(request):
+    objs = {
+        'users': User.objects.all(),
+    }
+    return render(request, 'profile.html', objs)
 
 def hwfunc(request):
     return render(request, 'hw.html', {})
@@ -52,3 +57,7 @@ def logoutfunc(request):
     logout(request)
     return redirect('login')
 
+def uploadfunc(request):
+    if request.method == 'POST':
+        pass
+    return render(request, 'upload.html', {})
