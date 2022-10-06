@@ -1,0 +1,53 @@
+<h3>Tasks Model</h3>
+<table border='1'>
+    <tr>
+        <th>pk</th>
+        <th>name</th>
+        <th>description</th>
+        <th>reward</th>
+    </tr>
+    {% for x in t1 %}
+    <tr>
+        <td>{{ x.key }}</td>
+        <td>{{ x.name }}</td>
+        <td>{{ x.description }}</td>
+        <td>{{ x.reward }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Task Model</h3>
+<table border='1'>
+    <tr>
+        <th>belong</th>
+        <th>tasktype</th>
+        <th>content</th>
+        <th>answer</th>
+    </tr>
+    {% for x in t2 %}
+    <tr>
+        <td>{{ x.belong }}</td>
+        <td>{{ x.tasktype }}</td>
+        <td>{{ x.content }}</td>
+        <td>{{ x.answer }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Task in Model 'Hello'</h3>
+<table border='1'>
+    <tr>
+        <th>belong</th>
+        <th>tasktype</th>
+        <th>content</th>
+        <th>answer</th>
+    </tr>
+    {% for x in t3 %}
+    <tr>
+        <td>{{ x.belong }}</td>
+        <td>{{ x.tasktype }}</td>
+        <td>{{ x.content }}</td>
+        <td>{{ x.answer }}</td>
+    </tr>
+    {% endfor %}
+</table>

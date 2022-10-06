@@ -1,14 +1,25 @@
 <h1>List view</h1>
 
-<ul>
-{% for tm in tasksmodel %}
-    <li>
-        {{ tm.name }} <br>
-        {{ tm.description }} <br>
-        {{ tm.size }} <br>
-        {{ tm.reward }} <br>
-    </li>
-{% endfor %}
-</ul>
+<h3>全部任务</h3>
+<table border='1'>
+    <tr>
+        <th>key</th>
+        <th>name</th>
+        <th>desc</th>
+        <th>reward</th>
+        <th>detail</th>
+    </tr>
+    {% for x in t1 %}
+    <tr>
+        <td>{{ x.key }}</td>
+        <td>{{ x.name }}</td>
+        <td>{{ x.description }}</td>
+        <td>{{ x.reward }}</td>
+        <td><a href="{% url 'detail' x.key %}">click me</a></td>
+    </tr>
+    {% endfor %}
+</table>
 
+<a href="{% url 'profile' %}">whoami</a>
+<br>
 <a href="{% url 'logout' %}">Log out</a>

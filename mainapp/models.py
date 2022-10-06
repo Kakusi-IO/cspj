@@ -5,28 +5,32 @@ from django.dispatch import receiver
 
 # 描述分类任务的集合，是任务发布的最小单位
 class TasksModel(models.Model):
+    key = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64, default='hogehoeg')
     description = models.CharField(max_length=256, default='hogehoge')
-    size = models.IntegerField(default=0)
     reward = models.IntegerField(default=0)
+    userid1 = models.IntegerField(default=0) # 发布者id
+    userid2 = models.IntegerField(null=True) # 领取者id
+    userid3 = models.IntegerField(null=True)  # 请求测试者id
+    status = models.IntegerField(default=0) # 0 未领取 1 测试结果未确认 2 进行中 3 已完成
     
     def __str__(self):
         return self.name
 
 # 描述每条分类任务
 class TaskModel(models.Model):
-    tasks = models.ForeignKey(TasksModel, on_delete=models.CASCADE, null=True)
-    # 0 文本 1 音频 2 图像 ...
-    tasktype = models.IntegerField(default=0)
-    # 描述选项，用特殊字符分割，暂定~
-    choices = models.CharField(max_length=256, default='hogehoge')
-    # 描述选项答案，二进制，低位表示前面的选项，支持多选
+
+    belong = models.IntegerField(default=0)
+    tasktype = models.IntegerField(default=0) # 0 文本 1 音频 2 图像 ...
+    content = models.CharField(max_length=256, default='hogehoge')
     answer = models.IntegerField(default=0)
+
     def __str__(self):
-        return self.choices
+        return self.content
 
 
 class Profile(models.Model):
+    key = models.IntegerField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(null=True, blank=True)
     point = models.IntegerField(default=0)

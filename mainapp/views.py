@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -9,14 +9,22 @@ from .models import *
 
 def listfunc(request):
     objs = {
-        # 'alltask': [TaskModel.objects.all()],
-        'tasksmodel' : TasksModel.objects.all(),
+        'me': request.user,
+        't1': TasksModel.objects.all(),
+        't2': TaskModel.objects.all(),
+        't3': TaskModel.objects.filter(belong = 1),
     }
     return render(request, 'list.html', objs)
 
 def profilefunc(request):
+    user = request.user
+    pf = get_object_or_404(Profile, user=user)
+    t1 = TasksModel.objects.filter(userid1=pf.key) # 我发布的任务
     objs = {
-        'users': User.objects.all(),
+        'me': user,
+        'pf': pf,
+        't1': t1,
+        # 't1': 
     }
     return render(request, 'profile.html', objs)
 
@@ -61,3 +69,18 @@ def uploadfunc(request):
     if request.method == 'POST':
         pass
     return render(request, 'upload.html', {})
+
+def testfunc(request):
+    objs = {
+        't1': TasksModel.objects.all(),
+        't2': TaskModel.objects.all(),
+        't3': TaskModel.objects.filter(belong = 1),
+    }
+    return render(request, 'test.html', objs)
+
+def detailfunc(request, pk):
+    objs = {
+        't1': get_object_or_404(TasksModel, pk=pk),
+        't2': TaskModel.objects.filter(belong=pk),
+    }
+    return render(request, 'detail.html', objs)

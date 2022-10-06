@@ -1,0 +1,39 @@
+<h3>数据集</h3>
+<table border='1'>
+    <tr>
+        <th>pk</th>
+        <th>name</th>
+        <th>description</th>
+        <th>reward</th>
+        <th>userid1</th>
+        <th>userid2</th>
+        <th>userid3</th>
+    </tr>
+    
+    <tr>
+        <td>{{ t1.key }}</td>
+        <td>{{ t1.name }}</td>
+        <td>{{ t1.description }}</td>
+        <td>{{ t1.reward }}</td>
+        <td>{{ t1.userid1 }}</td>
+        <td>{{ t1.userid2 }}</td>
+        <td>{{ t1.userid3 }}</td>
+    </tr>
+</table>
+<h3>Task Model</h3>
+<table border='1'>
+    <tr>
+        <th>belong</th>
+        <th>tasktype</th>
+        <th>content</th>
+        <th>answer</th>
+    </tr>
+    {% for x in t2 %}
+    <tr>
+        <td>{{ x.belong }}</td>
+        <td>{{ x.tasktype }}</td>
+        <td>{{ x.content }}</td>
+        <td>{{ x.answer }}</td>
+    </tr>
+    {% endfor %}
+</table>

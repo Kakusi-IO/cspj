@@ -1,0 +1,35 @@
+<h3>个人资料</h3>
+<table border="1">
+    <tr>
+        <th>key</th>
+        <th>user</th>
+        <th>avader</th>
+        <th>point</th>
+    </tr>
+    <tr>
+        <td>{{ pf.key }}</td>
+        <td>{{ pf.user }}</td>
+        <td>{{ pf.avader }}</td>
+        <td>{{ pf.point }}</td>        
+    </tr>
+</table>
+
+<h3>我发布的任务</h3>
+<table border="1">
+    <tr>
+        <th>key</th>
+        <th>name</th>
+        <th>desc</th>
+        <th>reward</th>
+        <th>detail</th>
+    </tr>
+    {% for x in t1 %}
+    <tr>
+        <td>{{ x.key }}</td>
+        <td>{{ x.name }}</td>
+        <td>{{ x.description }}</td>
+        <td>{{ x.reward }}</td>
+        <td><a href="{% url 'detail' x.key %}">click me</a></td>
+    </tr>
+    {% endfor %}
+</table>
