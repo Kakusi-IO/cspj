@@ -76,11 +76,14 @@ WSGI_APPLICATION = 'cspj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql', #mysqlをデータベースとして使用することを指定
+        'NAME': 'cspj', #データベース名
+        'USER': 'win', #データベースを作成したユーザー名
+        'PASSWORD': '123-09qwe', #ログインするためのパスワード
+        'HOST': '82.157.251.139',
+        'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
