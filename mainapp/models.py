@@ -30,7 +30,7 @@ class TaskModel(models.Model):
 
 
 class Profile(models.Model):
-    key = models.IntegerField(primary_key=True)
+    key = models.IntegerField(primary_key=True, default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(null=True, blank=True)
     point = models.IntegerField(default=0)
