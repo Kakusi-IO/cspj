@@ -1,34 +1,74 @@
-<h3>profile</h3>
+{% extends 'base.html' %}
 
-{%for myTask in myTasks%}
+{% block navlist %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'index' %}">主页</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'list' %}">任务列表</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'upload' %}">发布任务</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">个人中心</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">退出登录</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-3 right-border">
+        <h3 class="text-center">个人信息</h3>
+        <img src="photo.jpg" alt="" width="60%" style="display: block; margin: 20px auto;">
+        <p>用户名：{{ user.username }}</p>
+        <p>邮箱：{{ user.email }}</p>
+        <p>积分：{{ profile.points }}</p>
+        <button type="button" class="btn btn-info">更换头像</button>
+        <button type="button" class="btn btn-warning">修改密码</button>
+
+    </div>
+    <div class="col-9">
+        <h3>详细信息</h3>
+        <table>
+            <tr>
+                <th>user_id</th>
+                <th>profile_id</th>
+                <th>username</th>
+                <th>points</th>
+            </tr>
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ profile.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ profile.points }}</td>
+            </tr>
+        </table>
+
+        <h3>我发布的</h3>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>reward</th>
+                <th>create_at</th>
+            </tr>
+            {% for t in myTasks %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td><a href="{% url 'detail' t.id%}">{{ t.name }}</a></td>
+                <td>{{ t.reward }}</td>
+                <td>{{ t.create_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- {%for myTask in myTasks%}
 {{myTask}} <br>
-{%endfor%}
+{%endfor%} -->
 
-<table border="1">
-    <tr>
-        <th>user_id</th>
-        <th>profile_id</th>
-        <th>username</th>
-        <th>points</th>
-    </tr>
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ profile.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ profile.points }}</td>        
-    </tr>
-</table>
-<table border="1">
-    <tr>
-        <th>user_id</th>
-        <th>profile_id</th>
-        <th>username</th>
-        <th>points</th>
-    </tr>
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ profile.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ profile.points }}</td>        
-    </tr>
-</table>
+{% endblock %}

@@ -1,4 +1,22 @@
-<h1>Hello, world!</h1>
+{% extends 'base.html' %}
+{% block navlist %}
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">主页</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'list' %}">任务列表</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'upload' %}">发布任务</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'profile' %}">个人中心</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">退出登录</a>
+</li>
+{% endblock %}
+
 <a href="{% url 'login' %}">Log in</a>
 <br>
 <a href="{% url 'signup' %}">Sign up</a>

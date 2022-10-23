@@ -1,25 +1,41 @@
-<h1>List view</h1>
+{% extends 'base.html' %}
 
-<h3>全部任务</h3>
-<table border='1'>
+{% block navlist %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'index' %}">主页</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'list' %}">任务列表</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'upload' %}">发布任务</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'profile' %}">个人中心</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#">退出登录</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<h3>任务一览</h3>
+<table>
     <tr>
-        <th>key</th>
+        <th>id</th>
         <th>name</th>
-        <th>desc</th>
         <th>reward</th>
-        <th>detail</th>
+        <th>create_at</th>
     </tr>
-    {% for x in t1 %}
+    {% for t in tasks %}
     <tr>
-        <td>{{ x.key }}</td>
-        <td>{{ x.name }}</td>
-        <td>{{ x.description }}</td>
-        <td>{{ x.reward }}</td>
-        <td><a href="{% url 'detail' x.key %}">click me</a></td>
+        <td>{{ t.id }}</td>
+        <td><a href="{% url 'detail' t.id%}">{{ t.name }}</a></td>
+        <td>{{ t.reward }}</td>
+        <td>{{ t.create_at }}</td>
     </tr>
     {% endfor %}
 </table>
 
-<a href="{% url 'profile' %}">whoami</a>
-<br>
-<a href="{% url 'logout' %}">Log out</a>
+{% endblock %}

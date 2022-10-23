@@ -5,37 +5,50 @@ from django.contrib.auth.models import User
 # from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, logout, login
 # from django.views.generic import ListView
+from .forms import UploadFileForm
 
 import mysql.connector
 from .mydb import db
 
 
 def listfunc(request):
-    objs = {
+    db.connect()
+    mycursor = db.mydb.cursor()
+    mycursor.execute("select * from task order by create_at desc")
+    tasks = mycursor.fetchall()
 
+    objs = {
+        "tasks": [dict(zip(
+            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
+            t
+        )) for t in tasks]
     }
     return render(request, 'list.html', objs)
+
 
 def profilefunc(request):
     user = request.user
     # print(user.id)
     db.connect()
     mycursor = db.mydb.cursor()
-    mycursor.execute("select * from profile where user_id = {}".format(user.id))
+    mycursor.execute(
+        "select * from profile where user_id = {}".format(user.id))
     profile = mycursor.fetchone()
 
     mycursor = db.mydb.cursor()
     mycursor.execute("select * from task where owner_id = {}".format(user.id))
     myTasks = mycursor.fetchall()
 
-
     objs = {
         "user": user,
         "profile": dict(zip(
-            ("id", "user_id", "points", "tel", "create_at", "update_at"), 
+            ("id", "user_id", "points", "tel", "create_at", "update_at"),
             profile
         )),
-        "myTasks": myTasks
+        "myTasks": [dict(zip(
+            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
+            t
+        )) for t in myTasks]
     }
     return render(request, 'profile.html', objs)
 
@@ -104,7 +117,44 @@ def testfunc(request):
 
 
 def detailfunc(request, pk):
-    objs = {
 
+    db.connect()
+    mycursor = db.mydb.cursor()
+    mycursor.execute("select * from task where id = {}".format(pk))
+    task = mycursor.fetchone()
+
+    mycursor = db.mydb.cursor()
+    mycursor.execute("select * from single_task where task_id = {}".format(pk))
+    single_tasks = mycursor.fetchall()
+
+    objs = {
+        "task": dict(zip(
+            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
+            task
+        )),
+        "single_tasks": [dict(zip(
+            ("id", "task_id", "type_id", "create_at", "update_at"),
+            st
+        )) for st in single_tasks]
     }
     return render(request, 'detail.html', objs)
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        print("checking...")
+        # if form.is_valid():
+        if True:
+            print("valid")
+            handle_uploaded_file(request.FILES['file'])
+            return render(request, "upload.html", {"message": "OK"})
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
+
+def handle_uploaded_file(f):
+    print("handle_upload_file")
+    with open('some/file/name.txt', 'wb+') as destination:
+        for chunk in f.chunks():
+            print("saving...")
+            destination.write(chunk)

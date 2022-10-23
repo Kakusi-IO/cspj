@@ -1,39 +1,35 @@
-<h3>数据集</h3>
-<table border='1'>
+<table border="1">
     <tr>
-        <th>pk</th>
+        <th>id</th>
         <th>name</th>
-        <th>description</th>
         <th>reward</th>
-        <th>userid1</th>
-        <th>userid2</th>
-        <th>userid3</th>
+        <th>create_at</th>
     </tr>
-    
+
     <tr>
-        <td>{{ t1.key }}</td>
-        <td>{{ t1.name }}</td>
-        <td>{{ t1.description }}</td>
-        <td>{{ t1.reward }}</td>
-        <td>{{ t1.userid1 }}</td>
-        <td>{{ t1.userid2 }}</td>
-        <td>{{ t1.userid3 }}</td>
+        <td>{{ task.id }}</td>
+        <td>{{ task.name }}</td>
+        <td>{{ task.reward }}</td>
+        <td>{{ task.create_at }}</td>
     </tr>
 </table>
-<h3>Task Model</h3>
-<table border='1'>
+
+<!-- {{single_tasks}} -->
+
+<table border="1">
     <tr>
-        <th>belong</th>
-        <th>tasktype</th>
-        <th>content</th>
-        <th>answer</th>
+        <th>id</th>
+        <th>task_id</th>
+        <th>type_id</th>
+        <th>create_at</th>
     </tr>
-    {% for x in t2 %}
+
+    {%for st in single_tasks%}
     <tr>
-        <td>{{ x.belong }}</td>
-        <td>{{ x.tasktype }}</td>
-        <td>{{ x.content }}</td>
-        <td>{{ x.answer }}</td>
+        <td>{{ st.id }}</td>
+        <td>{{ st.task_id }}</td>
+        <td>{{ st.type_id }}</td>
+        <td>{{ st.create_at }}</td>
     </tr>
-    {% endfor %}
+    {%endfor%}
 </table>

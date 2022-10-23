@@ -9,8 +9,8 @@ urlpatterns = [
     path('signup/', signupfunc, name='signup'),
     path('login/', loginfunc, name='login'),
     path('logout/', logoutfunc, name='logout'),
-    path('', hwfunc),
+    path('', hwfunc, name='index'),
     path('profile/', profilefunc, name='profile'),
-    path('upload/', uploadfunc, name='upload'),
+    path('upload/', upload_file, name='upload'),
     path('detail/<int:pk>', detailfunc, name='detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
