@@ -13,12 +13,7 @@ docker-compose logs --tail=10
 
 ## MODELS
 
-注：pk = primary key，数据库主键
 
-- TasksModel 描述数据集，是发布任务的单位。有pk
-- TaskModel 描述单条分类任务，包括类型（图片/文本/音频），题干，选项（不知道正确选项），belong存它属于的数据集的pk
-- User 是django auth模块提供的用户类型，有基本的信息：用户名，密码，邮箱
-- Profile 是扩展的用户数据，和User表的每条数据是一一对应关系，保存了该用户的头像图片和点数，有pk
 
 ## URLS
 
