@@ -1,13 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-# from django.http import HttpResponse
 from django.contrib.auth.models import User
-# from django.contrib import messages
-# from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, logout, login
-# from django.views.generic import ListView
-from .forms import UploadFileForm
 
-
+from sql_app.crud import *
 
 def listfunc(request):
     # TODO: 列出所有任务，支持按状态筛选，按时间排序
@@ -45,7 +40,7 @@ def signupfunc(request):
         try:
             user = User.objects.create_user(
                 username=username, password=password)
-            # TODO: 插入profile表
+            create_profile(user_id=user.id)
         except Exception as e:
             # messages.error(request, 'Duplicated user name.')
             message = e
