@@ -7,48 +7,24 @@ from django.contrib.auth import authenticate, logout, login
 # from django.views.generic import ListView
 from .forms import UploadFileForm
 
-import mysql.connector
-from .mydb import db
 
 
 def listfunc(request):
-    db.connect()
-    mycursor = db.mydb.cursor()
-    mycursor.execute("select * from task order by create_at desc")
-    tasks = mycursor.fetchall()
+    # TODO: 列出所有任务，支持按状态筛选，按时间排序
 
     objs = {
-        "tasks": [dict(zip(
-            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
-            t
-        )) for t in tasks]
+
     }
     return render(request, 'list.html', objs)
 
 
 def profilefunc(request):
+    # TODO: 用户详细信息，有修改头像、密码的入口
+    # 列出属于该用户的任务（发布和认领的） get_task_by_user
     user = request.user
-    # print(user.id)
-    db.connect()
-    mycursor = db.mydb.cursor()
-    mycursor.execute(
-        "select * from profile where user_id = {}".format(user.id))
-    profile = mycursor.fetchone()
-
-    mycursor = db.mydb.cursor()
-    mycursor.execute("select * from task where owner_id = {}".format(user.id))
-    myTasks = mycursor.fetchall()
-
     objs = {
         "user": user,
-        "profile": dict(zip(
-            ("id", "user_id", "points", "tel", "create_at", "update_at"),
-            profile
-        )),
-        "myTasks": [dict(zip(
-            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
-            t
-        )) for t in myTasks]
+
     }
     return render(request, 'profile.html', objs)
 
@@ -58,6 +34,7 @@ def hwfunc(request):
 
 
 def signupfunc(request):
+    # TODO: 收集email和电话号码（email要验证）
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -68,12 +45,7 @@ def signupfunc(request):
         try:
             user = User.objects.create_user(
                 username=username, password=password)
-            db.connect()
-            mycursor = db.mydb.cursor()
-            sql = "INSERT INTO profile (user_id) VALUES ({})".format(user.id)
-            # val = (user.id, )
-            mycursor.execute(sql)
-            db.mydb.commit()
+            # TODO: 插入profile表
         except Exception as e:
             # messages.error(request, 'Duplicated user name.')
             message = e
@@ -84,7 +56,6 @@ def signupfunc(request):
 
 
 def loginfunc(request):
-    # print(request.method)
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -99,62 +70,29 @@ def loginfunc(request):
 
 
 def logoutfunc(request):
+    # TODO: logout页面
     logout(request)
     return redirect('login')
 
 
 def uploadfunc(request):
+    # TODO: 上传文件
     if request.method == 'POST':
         pass
     return render(request, 'upload.html', {})
 
 
-def testfunc(request):
-    objs = {
-
-    }
-    return render(request, 'test.html', objs)
-
-
 def detailfunc(request, pk):
-
-    db.connect()
-    mycursor = db.mydb.cursor()
-    mycursor.execute("select * from task where id = {}".format(pk))
-    task = mycursor.fetchone()
-
-    mycursor = db.mydb.cursor()
-    mycursor.execute("select * from single_task where task_id = {}".format(pk))
-    single_tasks = mycursor.fetchall()
-
+    # TODO: 任务详情
     objs = {
-        "task": dict(zip(
-            ("id", "owner_id", "name", "reward", "create_at", "update_at"),
-            task
-        )),
-        "single_tasks": [dict(zip(
-            ("id", "task_id", "type_id", "create_at", "update_at"),
-            st
-        )) for st in single_tasks]
+
     }
     return render(request, 'detail.html', objs)
 
 def upload_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        print("checking...")
-        # if form.is_valid():
-        if True:
-            print("valid")
-            handle_uploaded_file(request.FILES['file'])
+        # TODO: 上传任务文件
             return render(request, "upload.html", {"message": "OK"})
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
-
-def handle_uploaded_file(f):
-    print("handle_upload_file")
-    with open('some/file/name.txt', 'wb+') as destination:
-        for chunk in f.chunks():
-            print("saving...")
-            destination.write(chunk)
