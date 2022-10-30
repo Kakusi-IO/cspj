@@ -236,6 +236,7 @@ docker部署：`from .models import *, from .database import Base, SessionLocal`
 | NULL |      | 数据库中更改task 、receive状态 |
 
 ### 重置任务状态
+**函数名：backtrack_task**
 
 | 类型 | 名称    | 备注 |
 | ---- | ------- | ---- |
