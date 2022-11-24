@@ -1,25 +1,37 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
+import requests
+from os.path import join
+import json
 
-from sql_app.crud import *
+BASE_URL = 'http://0.0.0.0/api/'
 
 def listfunc(request):
-    # TODO: 列出所有任务，支持按状态筛选，按时间排序
-
-    objs = {
-
+    print(BASE_URL)
+    tasks = requests.get(join(BASE_URL, 'task/all'))
+    obj = {
+        'tasks': tasks.json()
     }
-    return render(request, 'list.html', objs)
+    return render(request, 'list.html', obj)
 
+def detailfunc(request, pk):
+    task = requests.get(join(BASE_URL, 'task'), params={'task_id': pk})
+    single_tasks = requests.get(join(BASE_URL, 'task/single'), params={'task_id': pk})
+    objs = {
+        'task': task.json(),
+        'single_tasks': single_tasks.json()
+    }
+    return render(request, 'detail.html', objs)
 
 def profilefunc(request):
-    # TODO: 用户详细信息，有修改头像、密码的入口
-    # 列出属于该用户的任务（发布和认领的） get_task_by_user
     user = request.user
+    profile = requests.get(join(BASE_URL, 'user/profile'), params={'user_id': user.id})
+    myTasks = requests.get(join(BASE_URL, 'user/tasks'), params={'owner_id': user.id})
     objs = {
         "user": user,
-
+        'profile': profile.json(),
+        'myTasks': myTasks.json()
     }
     return render(request, 'profile.html', objs)
 
@@ -27,28 +39,19 @@ def profilefunc(request):
 def hwfunc(request):
     return render(request, 'hw.html', {})
 
-
 def signupfunc(request):
-    # TODO: 收集email和电话号码（email要验证）
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         password2 = request.POST['password2']
         if not password == password2:
             return render(request, 'signup.html', {'message': 'Passwords of 2 input not match.'})
-        message = "OK, Please log in."
-        try:
-            user = User.objects.create_user(
-                username=username, password=password)
-            create_profile(user_id=user.id)
-        except Exception as e:
-            # messages.error(request, 'Duplicated user name.')
-            message = e
-        finally:
-            return render(request, "signup.html", {"message": message})
-
+        data = {
+            'username': username, 'password': password
+        }
+        res = requests.post(join(BASE_URL, 'user/create'), data=json.dumps(data))
+        return render(request, "signup.html", {'message': res.status_code})
     return render(request, 'signup.html', {})
-
 
 def loginfunc(request):
     if request.method == 'POST':
@@ -65,29 +68,24 @@ def loginfunc(request):
 
 
 def logoutfunc(request):
-    # TODO: logout页面
     logout(request)
     return redirect('login')
 
 
 def uploadfunc(request):
-    # TODO: 上传文件
-    if request.method == 'POST':
-        pass
     return render(request, 'upload.html', {})
 
-
-def detailfunc(request, pk):
-    # TODO: 任务详情
-    objs = {
-
-    }
-    return render(request, 'detail.html', objs)
-
-def upload_file(request):
+def createtaskfunc(request):
     if request.method == 'POST':
-        # TODO: 上传任务文件
-            return render(request, "upload.html", {"message": "OK"})
-    else:
-        form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
+        user = request.user
+        taskname = request.POST['taskname']
+        reward = request.POST['reward']
+        typeno = request.POST['typeno']
+        jsonfile = request.FILES['jsonfile']
+        data = {'name': taskname, 'reward': reward, 'typeno': typeno, 'owner_id': user.id}
+        res = requests.post(join(BASE_URL, 'task/create'), data=json.dumps(data))
+        res = res.content.decode('utf-8')
+        ress = requests.post(join(BASE_URL, 'task/single/upload'), params=json.loads(res), files={'file': jsonfile})
+        print(ress.__dict__)
+        # 422, 文件没传上
+    return render(request, 'createtask.html', {})

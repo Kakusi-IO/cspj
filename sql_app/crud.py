@@ -12,6 +12,9 @@ def get_profile_by_user_id(db: Session, user_id: int):
 def get_task_by_id(db: Session, user_id: int):
     return db.query(Task).filter(Task.id == user_id).one()
 
+def get_all_tasks(db: Session):
+    return db.query(Task).all()
+
 def get_tasks_by_owner_id(db: Session, owner_id: int):
     return db.query(Task).filter(Task.owner_id == owner_id).all()
 
@@ -63,11 +66,11 @@ def create_profile(db: Session, user_id: int):
     db.add(pf)
     db.commit()
 
-def create_task(db: Session, owner_id: int, name: str, reward: int):
-    tsk = Task(owner_id=owner_id, name=name, reward=reward)
+def create_task(db: Session, owner_id: int, name: str, reward: int, typeno: int):
+    tsk = Task(owner_id=owner_id, name=name, reward=reward, typeno=typeno)
     db.add(tsk)
     db.commit()
-    # return tsk.id
+    return tsk.id
 
 def request_task(db: Session, user_id: int, task_id: int):
     req = Request(user_id=user_id, task_id=task_id)

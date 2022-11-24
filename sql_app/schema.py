@@ -2,6 +2,7 @@ from ninja import Schema
 from typing import Optional
 from . import crud
 from .database import DBManager
+from datetime import date
 
 class User(Schema):
     id: int
@@ -33,6 +34,7 @@ class Task(Schema):
     status_name: str
     type_name: str
     owner_name: str
+    create_at: date
 
     @staticmethod
     def resolve_owner_name(obj):
@@ -85,6 +87,7 @@ class TaskIn(Schema):
     owner_id: int
     name: str
     reward: int = 500
+    typeno: int = 0
 
 
 

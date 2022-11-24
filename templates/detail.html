@@ -21,15 +21,16 @@
         <th>id</th>
         <th>task_id</th>
         <th>type_id</th>
-        <th>create_at</th>
+        <!-- <th>create_at</th> -->
     </tr>
 
     {%for st in single_tasks%}
     <tr>
         <td>{{ st.id }}</td>
         <td>{{ st.task_id }}</td>
-        <td>{{ st.type_id }}</td>
-        <td>{{ st.create_at }}</td>
+        <!-- <td>{{ st.type_id }}</td>
+        <td>{{ st.create_at }}</td> -->
+        <td>{{ st.source_url }}</td>
     </tr>
     {%endfor%}
 </table>

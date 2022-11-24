@@ -1,0 +1,20 @@
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="taskname" id="taskname">
+    <label for="taskname">名称</label><br>
+  
+    <input type="number" name="reward" id="reward">
+    <label for="reward">报酬</label><br>
+
+    <select name="typeno" id="typeno">
+        <option value="0">文本分类</option>
+        <option value="1">音频分类</option>
+        <option value="2">图像分类</option>
+        <option value="3">框图</option>
+    </select>
+
+    <input type="file" name="jsonfile" id="jsonfile">
+    <label for="jsonfile">json文件</label><br>
+  
+    <input type="submit" value="submit">
+</form> 
