@@ -86,14 +86,15 @@ class TaskIn(Schema):
     name: str
     reward: int = 500
 
-class SingleTask(Schema):
-    id: int
-    task_id: int
-    source_url: str
+
 
 class SingleTaskIn(Schema):
     task_id: int
     source_url: str = 'https://raw.githubusercontent.com/Kakusi-IO/images/main/Mr.Love.txt'
+
+class SingleTask(SingleTaskIn):
+    id: int
+    # finished: Optional[bool]
 
 class Message(Schema):
     message: str

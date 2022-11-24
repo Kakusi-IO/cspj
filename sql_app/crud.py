@@ -1,5 +1,6 @@
 from .models import *
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import exists
 from typing import Optional
 
 def get_user_by_user_id(db: Session, user_id: int):
@@ -18,12 +19,16 @@ def get_tasks_by_receiver_id(db: Session, user_id: int):
     q = db.query(Task, Receive.user_id).join(Task).join(Receive)
     return q.filter(Receive.user_id==user_id).all()
 
-def get_single_tasks_by_task_id(db: Session, task_id: int, limit: Optional[int], offset: int = 0):
-    q = db.query(Single_task).filter(Single_task.task_id==task_id).offset(offset)
-    if limit:
-        return q.limit(limit).all()
-    else:
+def get_single_tasks_by_task_id(db: Session, task_id: int, unfinished_only: bool):
+    q = db.query(Single_task).filter(Single_task.task_id==task_id)
+    if not unfinished_only:
         return q.all()
+    else:
+        finished = db.query(SCR.single_task_id).all()
+        # print(finished)
+        return q.filter(Single_task.task_id==task_id, ~Single_task.id.in_([fn[0] for fn in finished])).all()
+
+
 
 def get_requests_by_task(db: Session, task_id: int):
     return db.query(Request).filter(Request.task_id==task_id).all()
@@ -48,6 +53,7 @@ def get_single_results_by_request(db: Session, request_id: int):
 
 def get_single_task_by_id(db: Session, single_task_id: int):
     return db.query(Single_task).filter(Single_task.id==single_task_id).one()
+
 
 def get_all_users(db: Session):
     return db.query(User).all()

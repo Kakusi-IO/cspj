@@ -1,9 +1,11 @@
-from ninja import NinjaAPI, Schema
+from ninja import NinjaAPI, Schema, File
+from ninja.files import UploadedFile
 from . import crud, schema
 from .database import DBManager
 from typing import Optional, List
 from django.contrib.auth.models import User
 from ninja.responses import codes_2xx, codes_4xx
+import json
 
 api = NinjaAPI()
 
@@ -13,6 +15,18 @@ class HelloSchema(Schema):
 @api.post("/hello")
 def hello(request, data: HelloSchema):
     return f"Hello {data.name}"
+
+@api.post("/upload")
+def upload(request, f: UploadedFile):
+    try:
+        data_ = f.read().decode('utf-8')
+        # print(data_)
+        data = json.loads(data_)
+        print(data)
+        return data
+    except Exception as e:
+        return {'exception': e.__str__()}
+    # return {'name': file.name, 'len': len(data)}
 
 @api.get('/user', response=schema.User)
 def get_user(request, user_id: int):
@@ -71,9 +85,11 @@ def create_task(request, data: schema.TaskIn):
         return 400, {'message': e.__str__()}
 
 @api.get('/task/single', response=List[schema.SingleTask])
-def get_single_tasks_by_task_id(request, task_id: int, limit: Optional[int] = None, offset: int = 0):
+def get_single_tasks_by_task_id(request, task_id: int, not_finished: bool = False):
     with DBManager() as db:
-        return crud.get_single_tasks_by_task_id(db, task_id, limit, offset)
+        return crud.get_single_tasks_by_task_id(db, task_id, not_finished)
+
+
 
 @api.post('/task/single/create', response={codes_2xx: schema.Message, codes_4xx:schema.Message})
 def create_single_tasks(request, data: List[schema.SingleTaskIn]):
@@ -81,6 +97,19 @@ def create_single_tasks(request, data: List[schema.SingleTaskIn]):
         with DBManager() as db:
             for sti in data: 
                 crud.create_single_task(db, sti.task_id, sti.source_url)
+        return 201, {'message': 'created'}
+    except Exception as e:
+        return 400, {'message': e.__str__()}
+
+@api.post('/task/single/upload', response={codes_2xx: schema.Message, codes_4xx:schema.Message})
+def upload_single_tasks(request, f: UploadedFile, task_id: int):
+    try:
+        data_ = f.read().decode('utf-8') # str
+        data = json.loads(data_) # dict
+        print(data)
+        with DBManager() as db:
+            for sti in data: 
+                crud.create_single_task(db, task_id, sti['source_url'])
         return 201, {'message': 'created'}
     except Exception as e:
         return 400, {'message': e.__str__()}
